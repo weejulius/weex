@@ -223,8 +223,7 @@ import java.util.List;
  */
 public class WXRecycleImageManager {
 
-  public static final int VISIBLE_TOP_SPACE = -WXViewUtils.getScreenHeight() * 3 / 5;
-  public static final int VISIBLE_BOTTOM_SPACE = -VISIBLE_TOP_SPACE;
+  public final static int DEFAULT_TOP_SPACE = -WXViewUtils.getScreenHeight() * 3 / 5;
 
   public static void setIfRecycleImage(boolean ifRecycleImage) {
     IfRecycleImage = ifRecycleImage;
@@ -264,7 +263,19 @@ public class WXRecycleImageManager {
     return false;
   }
 
-  public void loadImage() {
+  public void loadImage(){
+    loadImage(-1);
+  }
+
+  public void loadImage(int offset){
+    if(offset==-1){
+      offset = -DEFAULT_TOP_SPACE;
+    }
+    loadImage(offset,offset);
+  }
+
+
+  public void loadImage(int topOffset, int bottomOffset) {
     if(!IfRecycleImage){
       return;
     }
@@ -287,8 +298,9 @@ public class WXRecycleImageManager {
       }
 
       view.getLocationOnScreen(mImgPos);
-      boolean in = (((mImgPos[1] > VISIBLE_TOP_SPACE) && (mImgPos[1] - screenH < VISIBLE_BOTTOM_SPACE))
-                    || (view.getHeight() + mImgPos[1] > 0 && mImgPos[1] <= 0));
+      int img_y = mImgPos[1]; //y axis of the image in the screen
+      boolean in = ((( img_y > -topOffset) && (img_y - screenH < bottomOffset))
+                    || (view.getHeight() + img_y > 0 && img_y <= 0));
       if (in && imageInfo.isRecycle) {
         imageInfo.isRecycle = false;
         src = component.getDomObject().attr.getImageSrc();

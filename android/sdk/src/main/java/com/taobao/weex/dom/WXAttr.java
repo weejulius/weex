@@ -207,6 +207,7 @@ package com.taobao.weex.dom;
 import com.taobao.weex.common.WXDomPropConstant;
 import com.taobao.weex.common.WXImageSharpen;
 import com.taobao.weex.utils.WXLogUtils;
+import com.taobao.weex.utils.WXViewUtils;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -366,6 +367,32 @@ public class WXAttr extends ConcurrentHashMap<String, Object> {
     }
     return false;
   }
+
+  /**
+   * 设置回收图片的offset
+   * @return
+   */
+  public int getIsRecycleImageOffset() {
+    Object obj = get(WXDomPropConstant.WX_ATTR_RECYCLE_IMG_OFFSET);
+    if (obj == null) {
+      return -1;
+    }
+
+    try {
+      int value =  Integer.parseInt(String.valueOf(obj));
+      if(value == -1){
+        return -1;
+      }
+      double offset = (double)value * WXViewUtils.getScreenHeight()/100;
+      return Double.valueOf(offset).intValue();
+    } catch (Exception e) {
+      WXLogUtils.e("[WXAttr] recycleImage offset:" + WXLogUtils.getStackTrace(e));
+    }
+    return -1;
+  }
+
+
+
   public String getScrollDirection() {
     Object scrollDirection = get("scrollDirection");
     if (scrollDirection == null) {

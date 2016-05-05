@@ -156,6 +156,7 @@ public class WXScroller extends WXVContainer implements WXScrollViewListener {
   private Rect mScrollRect;
 
   private int mContentHeight = 0;
+  private int mRecycleImageOffset = -1;
 
   public WXScroller(WXSDKInstance instance, WXDomObject node,
                     WXVContainer parent, String instanceId, boolean lazy) {
@@ -210,6 +211,7 @@ public class WXScroller extends WXVContainer implements WXScrollViewListener {
     String scroll;
     if (mDomObj != null && mDomObj.attr != null) {
       mInstance.getRecycleImageManager().setIfRecycleImage(mDomObj.attr.getIsRecycleImage());
+      mRecycleImageOffset = mDomObj.attr.getIsRecycleImageOffset();
     }
     if (mDomObj == null || mDomObj.attr == null) {
       scroll = "vertical";
@@ -405,7 +407,7 @@ public class WXScroller extends WXVContainer implements WXScrollViewListener {
         @Override
         public void run() {
           if (recycleImageManager != null && recycleImageManager.isRecycleImage()) {
-            recycleImageManager.loadImage();
+            recycleImageManager.loadImage(mRecycleImageOffset);
           }
         }
       }, 250);
@@ -550,7 +552,7 @@ public class WXScroller extends WXVContainer implements WXScrollViewListener {
     WXRecycleImageManager recycleImageManager = mInstance
         .getRecycleImageManager();
     if (recycleImageManager != null && recycleImageManager.isRecycleImage()) {
-      recycleImageManager.loadImage();
+      recycleImageManager.loadImage(mRecycleImageOffset);
     }
   }
 

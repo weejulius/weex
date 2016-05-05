@@ -250,7 +250,7 @@ public class WXImage extends WXComponent {
       }
 
       if (mDomObj.attr != null) {
-        if (getAbsoluteY() <= (WXViewUtils.getScreenHeight() + WXRecycleImageManager.VISIBLE_BOTTOM_SPACE)
+        if (getAbsoluteY() <= (WXViewUtils.getScreenHeight() + WXRecycleImageManager.DEFAULT_TOP_SPACE)
             || WXViewUtils.onScreenArea(getView())) {
           setImage(mDomObj.attr.getImageSrc(), ((ImageView) getView()));
         }

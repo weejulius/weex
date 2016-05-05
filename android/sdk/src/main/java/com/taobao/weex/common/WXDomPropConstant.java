@@ -315,6 +315,11 @@ public class WXDomPropConstant {
 
   //Image recycle attrs
   public static final String WX_ATTR_RECYCLE_IMG = "recycleImage";
+  /**
+   * 图片回收的区域范围,为屏幕高度的百分比
+   */
+  public static final String WX_ATTR_RECYCLE_IMG_OFFSET = "recycleImageOffset";
+
 
   public static final String WX_OVERFLOW = "overflow";
   public static final String WX_OVERFLOW_VISIBLE = "visible";
