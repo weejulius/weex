@@ -1,20 +1,16 @@
 buildscript {
     repositories {
+        maven { url "http://repo.alibaba-inc.com/nexus/content/groups/alirepositiry" }
         jcenter()
     }
     dependencies {
+        classpath "gradle.plugin.nl.javadude.gradle.plugins:license-gradle-plugin:0.12.1"
         classpath 'com.android.tools.build:gradle:2.1.0'
     }
 }
 
 plugins {
     id "com.github.hierynomus.license" version "0.12.1"
-}
-
-allprojects {
-    repositories {
-        jcenter()
-    }
 }
 
 apply plugin: 'com.android.library'

@@ -250,8 +250,9 @@ public class WXImage extends WXComponent {
       }
 
       if (mDomObj.attr != null) {
+
         if (getAbsoluteY() <= (WXViewUtils.getScreenHeight() + WXRecycleImageManager.DEFAULT_TOP_SPACE)
-            || WXViewUtils.onScreenArea(getView())) {
+            || WXViewUtils.onScreenArea(getView())||!WXRecycleImageManager.isRecycleImage()) {
           setImage(mDomObj.attr.getImageSrc(), ((ImageView) getView()));
         }
       }
@@ -324,6 +325,12 @@ public class WXImage extends WXComponent {
       scaleType = ScaleType.CENTER_INSIDE;
     } else if (resizeMode.equals("stretch")) {
       scaleType = ScaleType.FIT_XY;
+    }else if (resizeMode.equals("center")){
+      scaleType = ScaleType.CENTER;
+    }else if(resizeMode.equals("start")){
+      scaleType = ScaleType.FIT_START;
+    }else if(resizeMode.equals("end")){
+      scaleType = ScaleType.FIT_END;
     }
     return scaleType;
   }

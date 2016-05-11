@@ -213,6 +213,7 @@ import android.util.SparseArray;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 
 import com.taobao.weex.WXEnvironment;
 import com.taobao.weex.WXSDKInstance;
@@ -224,6 +225,7 @@ import com.taobao.weex.ui.component.WXEventType;
 import com.taobao.weex.ui.component.WXLoading;
 import com.taobao.weex.ui.component.WXRefresh;
 import com.taobao.weex.ui.component.WXVContainer;
+import com.taobao.weex.ui.view.WXImageView;
 import com.taobao.weex.ui.view.listview.BounceRecyclerView;
 import com.taobao.weex.ui.view.listview.IRefreshLayout;
 import com.taobao.weex.ui.view.listview.adapter.IOnLoadMoreListener;
@@ -379,7 +381,7 @@ public class WXListComponent extends WXVContainer implements
    */
   @Override
   public void onViewRecycled(ListBaseViewHolder holder) {
-
+    recycleImage(holder.itemView);
   }
 
   /**
@@ -390,7 +392,15 @@ public class WXListComponent extends WXVContainer implements
    */
   @Override
   public void onBindViewHolder(ListBaseViewHolder holder, int position) {
-
+    WXComponent component=getChild(position);
+    if (indoreCells != null
+        && indoreCells.contains(getItemViewType(position))){
+      return;
+    }
+    if(component!=null){
+      component.bind(null);
+      component.flushView();
+    }
   }
 
   /**
@@ -414,16 +424,12 @@ public class WXListComponent extends WXVContainer implements
           if (component.isLazy()) {
               component.lazy(false);
               component.createView(this, -1);
-              component.bind(null);
-              component.flushView();
               return new ListBaseViewHolder(component.getView());
           } else if (component instanceof WXRefresh) {
             return createVHForWXRefresh(component);
           } else if (component instanceof WXLoading) {
             return createVHForWXLoading(component);
           } else if (getChild(i).getView() != null) {
-            component.bind(component.getView());
-            component.flushView();
             return new ListBaseViewHolder(component.getView());
           }
         }
@@ -446,7 +452,7 @@ public class WXListComponent extends WXVContainer implements
       WXLogUtils.e(TAG,
                    "getItemViewType: NO ID, this will crash the whole render system of WXListRecyclerView");
     }
-    prepareFixedComponent(position);
+    prepareFixedComponent(position,itemViewType);
     return itemViewType;
   }
 
@@ -552,18 +558,29 @@ public class WXListComponent extends WXVContainer implements
     }
   }
 
+  private void recycleImage(View view){
+    if(view instanceof WXImageView){
+      ((WXImageView) view).setImageDrawable(null);
+      mInstance.getImgLoaderAdapter().setImage(null, (WXImageView)view,
+                                               null, null);
+    }
+    else if(view instanceof ViewGroup){
+      for(int i=0;i<((ViewGroup) view).getChildCount();i++){
+        recycleImage(((ViewGroup) view).getChildAt(i));
+      }
+    }
+  }
+
   @NonNull
   private ListBaseViewHolder createVHForFixedComponent() {
     FrameLayout view = new FrameLayout(mContext);
-    view.setBackgroundColor(Color.BLUE);
-    view.setLayoutParams(new FrameLayout.LayoutParams(1, 1));
+    view.setBackgroundColor(Color.WHITE);
+    view.setLayoutParams(new FrameLayout.LayoutParams(0, 0));
     return new ListBaseViewHolder(view);
   }
 
   @NonNull
   private ListBaseViewHolder createVHForWXLoading(WXComponent component) {
-    component.bind(component.getView());
-    component.flushView();
     getView().setBounceFooterView(new IRefreshLayout.Adapter(component.getView()) {
       @Override
       public void onPull(float scale) {
@@ -579,8 +596,6 @@ public class WXListComponent extends WXVContainer implements
 
   @NonNull
   private ListBaseViewHolder createVHForWXRefresh(WXComponent component) {
-    component.bind(component.getView());
-    component.flushView();
     getView().setBounceHeaderView(new IRefreshLayout.Adapter(component.getView()) {
       @Override
       public void onPull(float scale) {
@@ -594,13 +609,13 @@ public class WXListComponent extends WXVContainer implements
     return new ListBaseViewHolder(view);
   }
 
-  private void prepareFixedComponent(int position) {
+  private void prepareFixedComponent(int position,int viewType) {
     if (mChildren.get(position).getDomObject().isFixed()) {
       if (indoreCells == null) {
         indoreCells = new ArrayList<>();
       }
-      if (!indoreCells.contains(position)) {
-        indoreCells.add(position);
+      if (!indoreCells.contains(viewType)) {
+        indoreCells.add(viewType);
       }
     }
   }
