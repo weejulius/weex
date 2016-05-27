@@ -278,6 +278,11 @@ public class WXWebView implements IWebView {
     }
 
     @Override
+    public void loadHtml(String html) {
+        getWebView().loadData(html, "text/html; charset=utf-8", "utf-8");
+    }
+
+    @Override
     public void reload() {
         getWebView().reload();
     }
@@ -336,6 +341,10 @@ public class WXWebView implements IWebView {
         settings.setDomStorageEnabled(true);
         settings.setSupportZoom(false);
         settings.setBuiltInZoomControls(false);
+        settings.setLoadWithOverviewMode(true);
+        settings.setUseWideViewPort(true);
+
+
         wv.setWebViewClient(new WebViewClient() {
 
             @Override

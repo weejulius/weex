@@ -233,12 +233,12 @@ public class WXImage extends WXComponent {
   @Override
   protected void initView() {
     mHost = new WXImageView(mContext, mDomObj);
-    ((ImageView) getView()).setScaleType(ScaleType.FIT_XY);
+    getView().setScaleType(ScaleType.FIT_XY);
   }
 
   @Override
-  public View getView() {
-    return super.getView();
+  public ImageView getView() {
+    return (ImageView) super.getView();
   }
 
   @Override

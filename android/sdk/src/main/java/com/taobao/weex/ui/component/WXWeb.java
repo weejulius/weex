@@ -220,6 +220,8 @@ public class WXWeb extends WXComponent {
     protected IWebView mWebView;
     private String mUrl;
     private boolean mUrlChanged;
+    private String mHtml;
+    private boolean mHtmlChanged;
 
     public WXWeb(WXSDKInstance instance, WXDomObject dom, WXVContainer parent, String instanceId, boolean isLazy) {
         super(instance, dom, parent, instanceId, isLazy);
@@ -279,6 +281,11 @@ public class WXWeb extends WXComponent {
             mUrlChanged = false;
             loadUrl(mUrl);
         }
+
+        if (!TextUtils.isEmpty(mHtml) && mHtmlChanged) {
+            mHtmlChanged = false;
+            loadData(mHtml);
+        }
     }
 
     @Override
@@ -299,6 +306,15 @@ public class WXWeb extends WXComponent {
         }
         mUrl = url;
         mUrlChanged = true;
+    }
+
+    @WXComponentProp(name = "html")
+    public void setHtml(String html) {
+        if (TextUtils.isEmpty(html) || mHost == null) {
+            return;
+        }
+        mHtml = html;
+        mHtmlChanged = true;
     }
 
     public void setAction(String action) {
@@ -324,6 +340,10 @@ public class WXWeb extends WXComponent {
 
     private void loadUrl(String url) {
         getWebView().loadUrl(url);
+    }
+
+    private void loadData(String html){
+        getWebView().loadHtml(html);
     }
 
     private void reload() {

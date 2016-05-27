@@ -210,6 +210,7 @@ public interface IWebView {
     public View getView();
     public void destroy();
     public void loadUrl(String url);
+    public void loadHtml(String html);
     public void reload();
     public void goBack();
     public void goForward();

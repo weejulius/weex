@@ -564,7 +564,7 @@ public class WXSDKInstance implements IWXActivityStateListener {
       return;
     }
 
-    if (!mActivityStateListeners.contains(listener)) {
+    if (mActivityStateListeners!=null && !mActivityStateListeners.contains(listener)) {
       mActivityStateListeners.add(listener);
     }
   }
@@ -576,43 +576,55 @@ public class WXSDKInstance implements IWXActivityStateListener {
   // WAActivityStateListener//////////////////////////////////////////////////////////////////////////////////
   @Override
   public void onActivityCreate() {
-    for (IWXActivityStateListener listener : mActivityStateListeners) {
-      listener.onActivityCreate();
+    if(mActivityStateListeners!=null && !mActivityStateListeners.isEmpty()) {
+      for (IWXActivityStateListener listener : mActivityStateListeners) {
+        listener.onActivityCreate();
+      }
     }
   }
 
   @Override
   public void onActivityStart() {
-    for (IWXActivityStateListener listener : mActivityStateListeners) {
-      listener.onActivityStart();
+    if(mActivityStateListeners!=null && !mActivityStateListeners.isEmpty()) {
+      for (IWXActivityStateListener listener : mActivityStateListeners) {
+        listener.onActivityStart();
+      }
     }
   }
 
   @Override
   public void onActivityPause() {
-    for (IWXActivityStateListener listener : mActivityStateListeners) {
-      listener.onActivityPause();
+    if(mActivityStateListeners!=null && !mActivityStateListeners.isEmpty()) {
+      for (IWXActivityStateListener listener : mActivityStateListeners) {
+        listener.onActivityPause();
+      }
     }
   }
 
   @Override
   public void onActivityResume() {
-    for (IWXActivityStateListener listener : mActivityStateListeners) {
-      listener.onActivityResume();
+    if(mActivityStateListeners!=null && !mActivityStateListeners.isEmpty()) {
+      for (IWXActivityStateListener listener : mActivityStateListeners) {
+        listener.onActivityResume();
+      }
     }
   }
 
   @Override
   public void onActivityStop() {
-    for (IWXActivityStateListener listener : mActivityStateListeners) {
-      listener.onActivityStop();
+    if(mActivityStateListeners!=null && !mActivityStateListeners.isEmpty()) {
+      for (IWXActivityStateListener listener : mActivityStateListeners) {
+        listener.onActivityStop();
+      }
     }
   }
 
   @Override
   public void onActivityDestroy() {
-    for (IWXActivityStateListener listener : mActivityStateListeners) {
-      listener.onActivityDestroy();
+    if(mActivityStateListeners!=null && !mActivityStateListeners.isEmpty()) {
+      for (IWXActivityStateListener listener : mActivityStateListeners) {
+        listener.onActivityCreate();
+      }
     }
     destroy();
   }

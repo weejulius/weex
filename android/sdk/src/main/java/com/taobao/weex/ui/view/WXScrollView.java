@@ -214,6 +214,7 @@ import android.os.Message;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
+import android.webkit.WebView;
 import android.widget.ScrollView;
 
 import com.taobao.weex.ui.component.WXComponent;
@@ -308,6 +309,13 @@ public class WXScrollView extends ScrollView implements Callback, IWXScroller, W
 
   public void removeScrollViewListener(WXScrollViewListener scrollViewListener) {
     mScrollViewListeners.remove(scrollViewListener);
+  }
+
+  @Override
+  public void requestChildFocus(View child, View focused) {
+    if (focused instanceof WebView)
+      return;
+    super.requestChildFocus(child, focused);
   }
 
   @Override
